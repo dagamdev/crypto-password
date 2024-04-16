@@ -1,14 +1,14 @@
 import { useRef, useState } from 'react'
 import styles from '@/styles/password.module.css'
 import requestService from '@/services/request'
-import { usePasswordsStore } from '@/providers/passwords-provider'
+import { usePasswordsStore } from '@/stores/passwords-store'
 
 export default function Password ({ password }: {
   password: Password
 }) {
   const plainPassword = useRef('')
   const [showPassword, setShowPassword] = useState(false)
-  const { passwords, setPasswords } = usePasswordsStore(s => s)
+  const [passwords, setPasswords] = usePasswordsStore(state => [state.passwords, state.setPasswords])
 
   const toggleShowPassword = async () => {
     try {
@@ -37,10 +37,6 @@ export default function Password ({ password }: {
   const deletePassword = () => {
     const updatedPasswords = passwords.filter(f => f.id !== password.id)
     setPasswords(updatedPasswords)
-
-    if (typeof localStorage === 'undefined') return
-
-    localStorage.setItem('passwords', JSON.stringify(updatedPasswords))
   }
 
   return (
