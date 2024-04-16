@@ -1,73 +1,53 @@
 'use client'
 import styles from '@/styles/page.module.css'
-import { useEffect, type FormEvent } from 'react'
-import requestService from '@/services/request'
 import Password from '@/components/password'
-import { usePasswordsStore } from '@/providers/passwords-provider'
+import { usePasswordsStore } from '@/stores/passwords-store'
+import LoadPasswords from '@/components/load-passwords'
+import PasswordForm from '@/components/add-password'
+import { useState } from 'react'
 
 export default function Home () {
-  const { passwords, setPasswords } = usePasswordsStore(s => s)
-
-  useEffect(() => {
-    if (typeof localStorage === 'undefined') return
-
-    const passStr = localStorage.getItem('passwords')
-
-    if (passStr === null) return
-
-    setPasswords(JSON.parse(passStr))
-  }, [])
-
-  const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
-    ev.preventDefault()
-
-    const name = ev.currentTarget.passName.value
-    const password = ev.currentTarget.password.value
-
-    ev.currentTarget.passName.value = ''
-    ev.currentTarget.password.value = ''
-
-    try {
-      const data = await requestService.encrypt<Record<'iv' | 'encrypted', string>>(password)
-
-      if (typeof localStorage === 'undefined') return
-
-      const updatedPasswords = [...passwords, {
-        id: crypto.randomUUID(),
-        name,
-        key: data.iv,
-        hash: data.encrypted
-      }]
-
-      setPasswords(updatedPasswords)
-      localStorage.setItem('passwords', JSON.stringify(updatedPasswords))
-    } catch (error) {
-      console.error(error)
-    }
-  }
+  const passwords = usePasswordsStore(state => state.passwords)
+  const [invertedHexColor, setInvertedHexColor] = useState<string>()
 
   return (
     <main className={styles.main}>
       <h1>Crypto password</h1>
 
-      <form onSubmit={handleSubmit}>
-        <h2>Create password</h2>
+      <LoadPasswords />
+      <PasswordForm />
 
-        <label>
-          Name
-          <input name='passName' type="text" required />
-        </label>
-        <label>
-          Password
-          <input name='password' type="password" required />
-        </label>
+      {passwords.length !== 0 && <>
+        <ul style={{ display: 'flex', flexWrap: 'wrap' }}>
+          {passwords.map(p => <Password key={p.id} password={p} />)}
+        </ul>
+        <a href={'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(passwords))} download={'passwords-backup.json'}>Download backup</a>
+      </>}
 
-        <button>Add password</button>
-      </form>
+      <label>
+        Inver HEX color
+        <input onChange={(ev) => {
+          const codigoHex = ev.currentTarget.value.replace('#', '')
+          if (codigoHex.length === 0) {
+            setInvertedHexColor(undefined)
+            return
+          }
 
-      {passwords.length !== 0 && <ul style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {passwords.map(p => <Password key={p.id} password={p} />)}
-      </ul>}
+          const decimal = parseInt(codigoHex, 16)
+          console.log({ decimal })
+
+          const componenteR = 255 - (decimal >> 16 & 255)
+          const componenteG = 255 - (decimal >> 8 & 255)
+          const componenteB = 255 - (decimal & 255)
+
+          const colorComplementario = '#' + ((componenteR << 16) + (componenteG << 8) + componenteB).toString(16).padStart(6, '0')
+
+          setInvertedHexColor(colorComplementario)
+        }} type="text" />
+      </label>
+      {invertedHexColor !== undefined && <p onClick={async () => {
+        await navigator.clipboard.writeText(invertedHexColor)
+      }}>{invertedHexColor}</p>}
     </main>
   )
 }
