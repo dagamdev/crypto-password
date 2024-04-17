@@ -1,8 +1,9 @@
-import { type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import requestService from '@/services/request'
 import { usePasswordsStore } from '@/stores/passwords-store'
 
 export default function AddPassword () {
+  const [showForm, setShowForm] = useState(false)
   const [passwords, addPassword] = usePasswordsStore(store => [store.passwords, store.addPassword, store.updatePassword])
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
@@ -29,8 +30,13 @@ export default function AddPassword () {
     }
   }
 
+  const toggleShow = () => {
+    setShowForm(sf => !sf)
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
+    <>
+    {showForm && <form onSubmit={handleSubmit}>
       <h2>Create password</h2>
 
       <label>
@@ -42,7 +48,9 @@ export default function AddPassword () {
         <input name='password' type="password" required />
       </label>
 
-      <button>Add password</button>
-    </form>
+      <button>Save password</button>
+    </form>}
+    <button onClick={toggleShow}>{showForm ? 'Cancel' : 'Add password'}</button>
+    </>
   )
 }
