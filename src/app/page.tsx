@@ -1,13 +1,12 @@
 'use client'
 import styles from '@/styles/page.module.css'
-import Password from '@/components/password'
-import { usePasswordsStore } from '@/stores/passwords-store'
 import LoadPasswords from '@/components/load-passwords'
 import PasswordForm from '@/components/add-password'
 import { useState } from 'react'
+import Search from '@/components/search'
+import Passwords from '@/components/passwords'
 
 export default function Home () {
-  const passwords = usePasswordsStore(state => state.passwords)
   const [invertedHexColor, setInvertedHexColor] = useState<string>()
 
   return (
@@ -15,14 +14,9 @@ export default function Home () {
       <h1>Crypto password</h1>
 
       <LoadPasswords />
+      <Search />
       <PasswordForm />
-
-      {passwords.length !== 0 && <>
-        <ul style={{ display: 'flex', flexWrap: 'wrap' }}>
-          {passwords.map(p => <Password key={p.id} password={p} />)}
-        </ul>
-        <a href={'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(passwords))} download={'passwords-backup.json'}>Download backup</a>
-      </>}
+      <Passwords />
 
       <label>
         Inver HEX color
