@@ -2,18 +2,25 @@ import { encrypt } from '../utils/crypto'
 
 export async function POST (req: Request) {
   try {
-    const { text } = await req.json()
+    const body = await req.json()
+    const encryptedData: Record<string, string> = {}
 
-    if (text === undefined) {
-      return Response.json({
-        error: 'text is undefined'
-      })
+    for (const key in body) {
+      const text = body[key]
+
+      if (typeof text !== 'string') {
+        return Response.json({
+          error: `${key} is not of type string`
+        })
+      }
+
+      const { encrypted, iv } = encrypt(text)
+      encryptedData[key] = `${encrypted}-${iv}`
     }
 
-    const encrypted = encrypt(text)
-
-    return Response.json(encrypted)
+    return Response.json(encryptedData)
   } catch (error) {
+    console.error(error)
     return Response.json({
       error: error instanceof Error ? error.message : 'An error has ocurred'
     }, { status: 400 })
