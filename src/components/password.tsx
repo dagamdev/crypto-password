@@ -8,13 +8,15 @@ export default function Password ({ password }: {
 }) {
   const plainPassword = useRef('')
   const [showPassword, setShowPassword] = useState(false)
-  const [passwords, setPasswords] = usePasswordsStore(state => [state.passwords, state.setPasswords])
+  const removePassword = usePasswordsStore(state => state.removePassword)
 
   const toggleShowPassword = async () => {
     try {
       if (plainPassword.current.length === 0) {
-        const decrypted = await requestService.decrypt(password.hash, password.key)
-        plainPassword.current = decrypted
+        const decrypted = await requestService.decrypt({
+          hash: password.hash
+        })
+        plainPassword.current = decrypted.hash
       }
       setShowPassword(s => !s)
     } catch (error) {
@@ -25,8 +27,10 @@ export default function Password ({ password }: {
   const copyPassword = async () => {
     try {
       if (plainPassword.current.length === 0) {
-        const decrypted = await requestService.decrypt(password.hash, password.key)
-        plainPassword.current = decrypted
+        const decrypted = await requestService.decrypt({
+          hash: password.hash
+        })
+        plainPassword.current = decrypted.hash
       }
       await navigator.clipboard.writeText(plainPassword.current)
     } catch (error) {
@@ -35,8 +39,7 @@ export default function Password ({ password }: {
   }
 
   const deletePassword = () => {
-    const updatedPasswords = passwords.filter(f => f.id !== password.id)
-    setPasswords(updatedPasswords)
+    removePassword(password.id)
   }
 
   return (
