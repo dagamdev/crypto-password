@@ -8,7 +8,6 @@ export async function POST (req: NextRequest) {
     const searchParams = req.nextUrl.searchParams
     const files = searchParams.get('files')?.split(',')
     const ignore = searchParams.get('ignore')?.split(',')
-    // console.log({ files, ignore, body })
 
     const decryptObject = <T extends Record<string, string>> (obj: T) => {
       for (const key in obj) {
