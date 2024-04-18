@@ -1,30 +1,24 @@
-import { useState, type FormEvent } from 'react'
-import requestService from '@/services/request'
+import { type ChangeEvent, type Dispatch, type SetStateAction, useState, type FormEvent } from 'react'
 import { usePasswordsStore } from '@/stores/passwords-store'
 
 export default function AddPassword () {
   const [showForm, setShowForm] = useState(false)
   const [passwords, addPassword] = usePasswordsStore(store => [store.passwords, store.addPassword, store.updatePassword])
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState('')
 
   const handleSubmit = async (ev: FormEvent<HTMLFormElement>) => {
     ev.preventDefault()
 
-    const name = ev.currentTarget.passName.value
-    const password = ev.currentTarget.password.value
-
     if (passwords.some(p => p.name === name)) return
 
-    ev.currentTarget.passName.value = ''
-    ev.currentTarget.password.value = ''
-
     try {
-      const encryptedData = await requestService.encrypt<Record<'iv' | 'encrypted', string>>(password)
-
       addPassword({
         name,
-        key: encryptedData.iv,
-        hash: encryptedData.encrypted
+        hash: password
       })
+      setName('')
+      setPassword('')
     } catch (error) {
       console.error(error)
     }
@@ -34,6 +28,12 @@ export default function AddPassword () {
     setShowForm(sf => !sf)
   }
 
+  const getHandleChange = (setState: Dispatch<SetStateAction<string>>) => {
+    return (ev: ChangeEvent<HTMLInputElement>) => {
+      setState(ev.target.value.trim())
+    }
+  }
+
   return (
     <>
     {showForm && <form onSubmit={handleSubmit}>
@@ -41,11 +41,11 @@ export default function AddPassword () {
 
       <label>
         Name
-        <input name='passName' type="text" required />
+        <input onChange={getHandleChange(setName)} name='passName' type="text" value={name} required />
       </label>
       <label>
         Password
-        <input name='password' type="password" required />
+        <input onChange={getHandleChange(setPassword)} name='password' type="password" value={password} required />
       </label>
 
       <button>Save password</button>
