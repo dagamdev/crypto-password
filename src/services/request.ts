@@ -6,13 +6,13 @@ const api = axios.create({
   baseURL: apiUrl
 })
 
-async function encrypt <T=any> (text: string) {
-  const res = await api.post<T>('encrypt', { text })
+async function encrypt <T extends Record<string, string>> (data: T) {
+  const res = await api.post<T>('encrypt', data)
   return res.data
 }
 
-async function decrypt <T=any> (hash: string, key: string) {
-  const res = await api.post<T>('decrypt', { hash, key })
+async function decrypt <T extends Record<string, string>> (data: T) {
+  const res = await api.post<T>('decrypt', data)
   return res.data
 }
 
