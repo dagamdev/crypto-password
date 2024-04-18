@@ -11,8 +11,12 @@ const key = crypto.createHash('sha256')
   .update(secretKey)
   .digest('hex').substring(0, 32)
 
-export function encrypt (text: string) {
-  const iv = crypto.randomBytes(16)
+export function createIv () {
+  return crypto.randomBytes(16)
+}
+
+export function encrypt (text: string, iv?: Buffer | string) {
+  if (iv === undefined) iv = createIv()
   const cipher = crypto.createCipheriv(alg, key, iv)
   const encrypted = Buffer.concat([
     cipher.update(text, 'utf8'),
