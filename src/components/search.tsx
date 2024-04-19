@@ -1,22 +1,18 @@
+import useTimeout from '@/hooks/timeout'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
-import { useRef, type ChangeEvent } from 'react'
+import { type ChangeEvent } from 'react'
 
 export default function Search () {
   const searchParams = useSearchParams()
   const pathName = usePathname()
   const router = useRouter()
-  const timeout = useRef<NodeJS.Timeout>()
+  const { execution } = useTimeout()
 
   const handleChange = (ev: ChangeEvent<HTMLInputElement>) => {
     const value = ev.target.value.trim()
 
-    if (timeout.current !== undefined) {
-      clearTimeout(timeout.current)
-    }
-
-    timeout.current = setTimeout(() => {
+    execution(() => {
       const params = new URLSearchParams(searchParams)
-      console.log({ value })
 
       if (value.length === 0) {
         params.delete('search')
@@ -25,7 +21,7 @@ export default function Search () {
       }
 
       router.replace(`${pathName}?${params.toString()}`)
-    }, 600)
+    }, 0.6)
   }
 
   return (
