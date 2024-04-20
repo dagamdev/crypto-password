@@ -2,7 +2,7 @@ import requestService from '@/services/request'
 
 function getLocalPasswords (): Password[] {
   try {
-    if (localStorage === undefined) return []
+    if (typeof localStorage === 'undefined') return []
 
     const str = localStorage.getItem('passwords')
 
@@ -10,13 +10,13 @@ function getLocalPasswords (): Password[] {
 
     return JSON.parse(str)
   } catch (error) {
-    // console.error('Error in getLocalPasswords: ', error)
     return []
   }
 }
 
 async function getPasswords () {
   try {
+    if (typeof localStorage === 'undefined') return []
     const encryptedPasswords = getLocalPasswords()
     const passwords = await requestService.decrypt(encryptedPasswords, {
       files: 'name'
