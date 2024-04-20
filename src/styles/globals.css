@@ -3,15 +3,18 @@
   color-scheme: light dark;
 
   --primary: #e8e9e0;
-  --secondary: #c9c9b2;
+  --secondary: #d3d3c0;
   --border: gray;
   --toast: #dadada;
+  --text: black;
+  --hover: #b8aa96;
   
   @media (prefers-color-scheme: dark) {
     --primary: #17161f;
-    --secondary: #36364d;
-    --border: gray;
+    --secondary: #2c2c3f;
     --toast: #252525;
+    --text: white;
+    --hover: #475569;
   }
 }
 
@@ -66,6 +69,11 @@ button, .button {
   text-align: center;
   border-radius: 6px;
   background-color: var(--secondary);
+  transition: background-color 0.2s ease;
+}
+
+button:hover, .button:hover {
+  background-color: var(--hover);
 }
 
 .toast {
