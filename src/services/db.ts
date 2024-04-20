@@ -78,8 +78,40 @@ async function deletePassword (passwordId: string) {
   }
 }
 
+async function updatePassword (passwordId: string, newData: Partial<Omit<Password, 'id'>>) {
+  try {
+    const passwords = getLocalPasswords()
+    const password = passwords.find(p => p.id === passwordId)
+
+    if (password === undefined) {
+      return {
+        error: 'The password to be updated was not found',
+        passwordId
+      }
+    }
+
+    const encryptedData = await requestService.encrypt(newData)
+    const name = newData.name ?? (await requestService.decrypt({ name: encryptedData.name })).name ?? ''
+    const updatedPassword = {
+      ...password,
+      ...encryptedData,
+      name
+    }
+
+    localStorage.setItem('passwords', JSON.stringify(passwords.map(p => p.id === passwordId ? updatedPassword : p)))
+
+    return updatedPassword
+  } catch (error) {
+    console.error('Error in updatePassword: ', error)
+    return {
+      error: error instanceof Error ? error.message : 'An error occurred while updated the password'
+    }
+  }
+}
+
 export default {
   getPasswords,
   createPassword,
-  deletePassword
+  deletePassword,
+  updatePassword
 }
