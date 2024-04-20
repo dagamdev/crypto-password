@@ -4,6 +4,7 @@ import dbService from '@/services/db'
 
 export interface PasswordsState {
   passwords: Password[]
+  visiblePasswordId?: string
 }
 
 export interface PasswordsActions {
@@ -11,6 +12,8 @@ export interface PasswordsActions {
   removePassword: (passwordId: string) => void
   setPasswords: (passwords: Password[]) => void
   updatePassword: (passwordId: string, newData: Partial<Omit<Password, 'id'>>) => void
+  setVisiblePassword: (passwordId: string) => void
+  setHidePassword: () => void
 }
 
 export type PasswordsStore = PasswordsState & PasswordsActions
@@ -45,9 +48,22 @@ export const usePasswordsStore = create<PasswordsStore>()((set, get) => {
     setPasswords (passwords) {
       set({ passwords })
     },
-    updatePassword (passwordId, newData) {
-      set((state) => ({ passwords: state.passwords.map(p => p.id === passwordId ? { ...p, ...newData } : p) }))
+    async updatePassword (passwordId, newData) {
+      const updatedPassword = await dbService.updatePassword(passwordId, newData)
+
+      if ('error' in updatedPassword) {
+        toast.error(updatedPassword.error)
+        return
+      }
+
+      set((state) => ({ passwords: state.passwords.map(p => p.id === passwordId ? updatedPassword : p) }))
       toast.success('Updated password')
+    },
+    setVisiblePassword (passwordId) {
+      set({ visiblePasswordId: passwordId })
+    },
+    setHidePassword () {
+      set({ visiblePasswordId: undefined })
     }
   }
 })
