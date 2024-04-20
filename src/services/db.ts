@@ -92,15 +92,20 @@ async function updatePassword (passwordId: string, newData: Partial<Omit<Passwor
 
     const encryptedData = await requestService.encrypt(newData)
     const name = newData.name ?? (await requestService.decrypt({ name: encryptedData.name })).name ?? ''
-    const updatedPassword = {
+
+    localStorage.setItem('passwords', JSON.stringify(passwords.map(p => p.id === passwordId
+      ? {
+          ...password,
+          ...encryptedData
+        }
+      : p
+    )))
+
+    return {
       ...password,
       ...encryptedData,
       name
     }
-
-    localStorage.setItem('passwords', JSON.stringify(passwords.map(p => p.id === passwordId ? updatedPassword : p)))
-
-    return updatedPassword
   } catch (error) {
     console.error('Error in updatePassword: ', error)
     return {
