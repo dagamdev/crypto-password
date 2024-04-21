@@ -2,7 +2,7 @@
 import styles from '@/styles/page.module.css'
 import LoadPasswords from '@/components/load-passwords'
 import PasswordForm from '@/components/add-password'
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import Search from '@/components/search'
 import Passwords from '@/components/passwords'
 import { usePasswordsStore } from '@/stores/passwords-store'
@@ -18,7 +18,9 @@ export default function Home () {
       <LoadPasswords />
       {passwords.length !== 0 && <Search />}
       <PasswordForm />
-      <Passwords />
+      <Suspense>
+        <Passwords />
+      </Suspense>
 
       <label>
         Inver HEX color
