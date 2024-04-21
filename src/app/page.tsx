@@ -5,16 +5,18 @@ import PasswordForm from '@/components/add-password'
 import { useState } from 'react'
 import Search from '@/components/search'
 import Passwords from '@/components/passwords'
+import { usePasswordsStore } from '@/stores/passwords-store'
 
 export default function Home () {
   const [invertedHexColor, setInvertedHexColor] = useState<string>()
+  const passwords = usePasswordsStore(store => store.passwords)
 
   return (
     <main className={styles.main}>
       <h1>Crypto password</h1>
 
       <LoadPasswords />
-      <Search />
+      {passwords.length !== 0 && <Search />}
       <PasswordForm />
       <Passwords />
 
