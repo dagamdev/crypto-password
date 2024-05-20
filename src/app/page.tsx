@@ -12,7 +12,7 @@ export default function Home () {
   const passwords = usePasswordsStore(store => store.passwords)
 
   return (
-    <main className={styles.main}>
+    <main>
       <h1>Crypto password</h1>
 
       <LoadPasswords />
