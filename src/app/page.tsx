@@ -1,5 +1,5 @@
 'use client'
-import styles from '@/styles/page.module.css'
+
 import LoadPasswords from '@/components/load-passwords'
 import PasswordForm from '@/components/add-password'
 import { Suspense, useState } from 'react'
@@ -22,7 +22,7 @@ export default function Home () {
         <Passwords />
       </Suspense>
 
-      <label>
+      {/* <label>
         Inver HEX color
         <input onChange={(ev) => {
           const codigoHex = ev.currentTarget.value.replace('#', '')
@@ -42,7 +42,7 @@ export default function Home () {
 
           setInvertedHexColor(colorComplementario)
         }} type="text" />
-      </label>
+      </label> */}
       {invertedHexColor !== undefined && <p onClick={async () => {
         await navigator.clipboard.writeText(invertedHexColor)
       }}>{invertedHexColor}</p>}
