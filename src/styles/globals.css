@@ -53,11 +53,9 @@ input {
 }
 
 main {
-  gap: 16px;
   padding: 16px;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+  max-width: 1000px;
+  margin-inline: auto;
 }
 
 ul {
