@@ -25,9 +25,11 @@ export default function LoadPasswords () {
   }
 
   return (
-    <label>
-      Load backup passwords
-      <input onChange={handleChange} type="file" accept=".json" id="backupPasswordsInput" />
-    </label>
+    <>
+      <input name='backupPasswordsInput' onChange={handleChange} type="file" accept=".json" id="backupPasswordsInput" />
+      <label htmlFor='backupPasswordsInput'>
+        Load backup passwords
+      </label>
+    </>
   )
 }
