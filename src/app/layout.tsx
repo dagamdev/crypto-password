@@ -1,8 +1,9 @@
+import '@/styles/globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import '@/styles/globals.css'
 import packageData from '../../package.json'
 import { Toaster } from 'sonner'
+import Header from '@/components/header'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -22,6 +23,7 @@ export default function RootLayout ({
         <Toaster richColors position='top-center' theme='system' pauseWhenPageIsHidden offset={16} toastOptions={{
           className: 'toast'
         }} />
+        <Header />
         {children}
         <div style={{ textAlign: 'center' }}>
           <span>v{packageData.version}</span>
