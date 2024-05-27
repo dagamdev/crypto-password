@@ -1,3 +1,5 @@
+'use client'
+
 import { usePasswordsStore } from '@/stores/passwords-store'
 import { type ChangeEvent } from 'react'
 import { toast } from 'sonner'
