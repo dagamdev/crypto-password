@@ -79,7 +79,9 @@ input {
 }
 
 main {
+  display: grid;
   padding: 16px;
+  row-gap: 16px;
   max-width: 1000px;
   margin-inline: auto;
 }
