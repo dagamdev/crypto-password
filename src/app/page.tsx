@@ -1,6 +1,5 @@
 'use client'
 
-import LoadPasswords from '@/components/load-passwords'
 import PasswordForm from '@/components/add-password'
 import { Suspense, useState } from 'react'
 import Search from '@/components/search'
@@ -8,21 +7,30 @@ import Passwords from '@/components/passwords'
 import { usePasswordsStore } from '@/stores/passwords-store'
 
 export default function Home () {
-  const [invertedHexColor, setInvertedHexColor] = useState<string>()
   const passwords = usePasswordsStore(store => store.passwords)
 
   return (
     <main>
-      <h1>Crypto password</h1>
-
-      <LoadPasswords />
-      {passwords.length !== 0 && <Search />}
       <PasswordForm />
-      <Suspense>
-        <Passwords />
-      </Suspense>
 
-      {/* <label>
+      <div>
+        {passwords.length !== 0 && <Search />}
+        <Suspense>
+          <Passwords />
+        </Suspense>
+      </div>
+
+      {''.length !== 0 && <InvertHEXColor />}
+    </main>
+  )
+}
+
+function InvertHEXColor () {
+  const [invertedHexColor, setInvertedHexColor] = useState<string>()
+
+  return (
+    <>
+      <label>
         Inver HEX color
         <input onChange={(ev) => {
           const codigoHex = ev.currentTarget.value.replace('#', '')
@@ -42,10 +50,10 @@ export default function Home () {
 
           setInvertedHexColor(colorComplementario)
         }} type="text" />
-      </label> */}
+      </label>
       {invertedHexColor !== undefined && <p onClick={async () => {
         await navigator.clipboard.writeText(invertedHexColor)
       }}>{invertedHexColor}</p>}
-    </main>
+    </>
   )
 }
