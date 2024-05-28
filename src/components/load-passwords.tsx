@@ -30,7 +30,7 @@ export default function LoadPasswords () {
     <>
       <input name='backupPasswordsInput' onChange={handleChange} type="file" accept=".json" id="backupPasswordsInput" />
       <label htmlFor='backupPasswordsInput'>
-        Load backup passwords
+        Load passwords
       </label>
     </>
   )
