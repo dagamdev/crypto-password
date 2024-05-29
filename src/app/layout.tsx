@@ -24,8 +24,10 @@ export default function RootLayout ({
           className: 'toast'
         }} />
         <Header />
+
         {children}
-        <div style={{ textAlign: 'center' }}>
+
+        <div className='version'>
           <span>v{packageData.version}</span>
         </div>
       </body>

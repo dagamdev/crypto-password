@@ -30,6 +30,11 @@ body {
   overflow-x: hidden;
   background-color: var(--primary);
 }
+body {
+  position: relative;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
 
 a {
   color: inherit;
@@ -103,6 +108,15 @@ button, .button {
 
 button:hover, .button:hover {
   background-color: var(--hover);
+}
+
+.version {
+  width: 100%;
+  bottom: 16px;
+  position: absolute;
+  font-size: smaller;
+  text-align: center;
+  font-weight: bolder;
 }
 
 .toast {
