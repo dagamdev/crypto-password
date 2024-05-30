@@ -95,15 +95,16 @@ ul {
 }
 
 button, .button {
+  display: block;
   border: none;
   cursor: pointer;
-  padding: 6px 12px;
+  padding: 8px;
   max-width: 260px;
-  font-size: small;
+  font-size: medium;
   text-align: center;
+  transition: background-color 0.2s ease;
   border-radius: 6px;
   background-color: var(--secondary);
-  transition: background-color 0.2s ease;
 }
 
 button:hover, .button:hover {
