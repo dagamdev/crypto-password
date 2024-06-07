@@ -15,6 +15,7 @@
     --toast: #252525;
     --text: white;
     --hover: #475569;
+    --accent: rgb(13, 119, 206);
   }
 }
 
@@ -37,8 +38,12 @@ body {
 }
 
 a {
-  color: inherit;
+  color: aqua;
   text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 label, input {
@@ -61,13 +66,13 @@ input[type=file] + label {
   display: inline-block;
   border-radius: 8px;
   font-weight: bolder;
-  background-color: var(--primary);
-  transition: background-color 0.2s ease;
+  background-color: var(--accent);
+  transition: box-shadow 0.3s ease;
 }
 
 input[type=file]:focus + label,
 input[type=file] + label:hover {
-  background-color: var(--hover);
+  box-shadow: 0 0 16px rgba(13, 119, 206, 0.4);
 }
 
 input[type=file]:focus + label {
@@ -95,20 +100,24 @@ ul {
 }
 
 button, .button {
-  display: block;
+  color: inherit;
   border: none;
   cursor: pointer;
   padding: 8px;
+  display: block;
   max-width: 260px;
   font-size: medium;
   text-align: center;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease, box-shadow .3s ease;
+  font-weight: bolder;
   border-radius: 6px;
-  background-color: var(--secondary);
+  background-color: var(--accent);
 }
 
 button:hover, .button:hover {
-  background-color: var(--hover);
+  box-shadow: 0 0 16px rgba(13, 119, 206, 0.4);
+  text-decoration: none;
+  /* background-color: var(--hover); */
 }
 
 .version {
@@ -122,4 +131,11 @@ button:hover, .button:hover {
 
 .toast {
   background-color: var(--toast);
+}
+
+.first-message {
+  display: flex;
+  row-gap: 16px;
+  align-items: center;
+  flex-direction: column;
 }
