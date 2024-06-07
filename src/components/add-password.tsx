@@ -1,8 +1,9 @@
+'use client'
+
 import { type ChangeEvent, type Dispatch, type SetStateAction, useState, type FormEvent } from 'react'
 import { usePasswordsStore } from '@/stores/passwords-store'
 
 export default function AddPassword () {
-  const [showForm, setShowForm] = useState(false)
   const [passwords, addPassword] = usePasswordsStore(store => [store.passwords, store.addPassword, store.updatePassword])
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
@@ -24,10 +25,6 @@ export default function AddPassword () {
     }
   }
 
-  const toggleShow = () => {
-    setShowForm(sf => !sf)
-  }
-
   const getHandleChange = (setState: Dispatch<SetStateAction<string>>) => {
     return (ev: ChangeEvent<HTMLInputElement>) => {
       setState(ev.target.value.trim())
@@ -35,8 +32,7 @@ export default function AddPassword () {
   }
 
   return (
-    <>
-    {showForm && <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <h2>Create password</h2>
 
       <label>
@@ -49,8 +45,6 @@ export default function AddPassword () {
       </label>
 
       <button>Save password</button>
-    </form>}
-    <button onClick={toggleShow}>{showForm ? 'Cancel' : 'Add password'}</button>
-    </>
+    </form>
   )
 }
