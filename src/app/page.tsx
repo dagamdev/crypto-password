@@ -1,27 +1,29 @@
 'use client'
 
-import PasswordForm from '@/components/add-password'
 import { Suspense, useState } from 'react'
 import Search from '@/components/search'
 import Passwords from '@/components/passwords'
 import { usePasswordsStore } from '@/stores/passwords-store'
+import Link from 'next/link'
 
 export default function Home () {
   const passwords = usePasswordsStore(store => store.passwords)
 
   return (
-    <main>
-      <PasswordForm />
-
-      <div>
-        {passwords.length !== 0 && <Search />}
+    <>
+        {passwords.length !== 0
+          ? <Search />
+          : <div className='first-message'>
+            <p>Aun no tienes passwords, create your first password</p>
+            <Link className='button' href='/create/password'>Create password</Link>
+          </div>
+        }
         <Suspense>
           <Passwords />
         </Suspense>
-      </div>
 
       {''.length !== 0 && <InvertHEXColor />}
-    </main>
+    </>
   )
 }
 
