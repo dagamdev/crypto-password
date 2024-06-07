@@ -25,7 +25,9 @@ export default function RootLayout ({
         }} />
         <Header />
 
-        {children}
+        <main>
+          {children}
+        </main>
 
         <div className='version'>
           <span>v{packageData.version}</span>
